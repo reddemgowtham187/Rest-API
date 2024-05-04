@@ -1,0 +1,60 @@
+package com.kodnest.serviceimpl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kodnest.entity.Laptop;
+import com.kodnest.entity.Student;
+import com.kodnest.repository.LaptopRepository;
+import com.kodnest.service.LaptopService;
+@Service
+public class LaptopServiceImpl implements LaptopService {
+
+	@Autowired
+	LaptopRepository laptopRepository;
+	
+	@Override
+	public List<Laptop> getLaptop() {
+		// TODO Auto-generated method stub
+		return laptopRepository.findAll();
+	}
+
+	@Override
+	public Laptop getLaptop(int id) {
+		Optional<Laptop> laptop= laptopRepository.findById(id);
+	      return laptop.orElse(null);
+	}
+
+	@Override
+	public void postLaptop(Laptop laptop) {
+       laptopRepository.save(laptop);		
+	}
+
+	@Override
+	public void deleteLaptop(int id) {
+         laptopRepository.deleteById(id);		
+	}
+
+	@Override
+	public void updateLaptop(int lid, Laptop uplap) {
+		 Optional<Laptop> exislap = laptopRepository.findById(lid);
+	        
+	        if(exislap.isPresent()) {
+	        	//Updating logic
+	        	Laptop laptop = exislap.get();
+	        	
+	        	String newname=uplap.getLname();
+	        	laptop.setLname(newname);
+	        	
+	        	laptopRepository.save(laptop);
+	        	System.out.println("Update Success!!");
+	        }
+	        else {
+	        	System.out.println("Record is not found!!");
+	        }		
+	}
+
+}
